@@ -22,7 +22,8 @@ services:
     image: snowy68/nginx-stable:latest
     container_name: nginx
     restart: unless-stopped
-    network_mode: host
+    ports:
+      - "80:80/tcp"
     volumes:
        - './nginx:/etc/nginx'
        - '/etc/passwd:/etc/passwd:ro'
