@@ -25,8 +25,8 @@ services:
     ports:
       - "80:80/tcp"
     volumes:
-       - './nginx:/etc/nginx'
-       - '/etc/passwd:/etc/passwd:ro'
+      - './nginx:/etc/nginx'
+      - '/etc/passwd:/etc/passwd:ro'
 ```
 # TODO
 - [ ] Support for arm64
