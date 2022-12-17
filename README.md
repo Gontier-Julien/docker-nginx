@@ -9,7 +9,6 @@ Added modules such as:
 
 - [ngx_brotli](https://github.com/google/ngx_brotli)
 - [ngx_fancyindex](https://github.com/aperezdc/ngx-fancyindex)
-- [ngx_headers_more_module](https://github.com/openresty/headers-more-nginx-module)
 - [ngx_http_auth_pam_module](https://github.com/sto/ngx_http_auth_pam_module)
 
 # Docker Compose configuration:

@@ -4,7 +4,6 @@ FROM nginx:stable-alpine AS builder
 
 ARG version
 ARG pam=1.5.3
-ARG header=0.34
 ARG fancyindex=0.5.2
 
 WORKDIR /root/
@@ -31,15 +30,6 @@ RUN apk add --update --no-cache build-base pcre2-dev zlib-dev linux-pam-dev brot
     && ./configure --with-compat --add-dynamic-module=../ngx_brotli-1.0.0rc \
     && make modules \
 
-    # header-more module
-    && cd /root/ \
-    && wget https://github.com/openresty/headers-more-nginx-module/archive/refs/tags/v${header}.tar.gz -O ngx_header.tar.gz \
-    && tar xf ngx_header.tar.gz \
-    && cd headers-more-nginx-module-${header} \
-    && cd ../nginx-${version} \
-    && ./configure --with-compat --add-dynamic-module=../headers-more-nginx-module-${header} \
-    && make modules \
-
     # fancyindex module
     && cd /root/ \
     && wget https://github.com/aperezdc/ngx-fancyindex/archive/refs/tags/v${fancyindex}.tar.gz -O ngx_fancyindex.tar.gz \
@@ -56,7 +46,6 @@ ARG version
 COPY --from=builder /root/nginx-${version}/objs/ngx_http_auth_pam_module.so /usr/lib/nginx/modules/
 COPY --from=builder /root/nginx-${version}/objs/ngx_http_brotli_filter_module.so /usr/lib/nginx/modules/
 COPY --from=builder /root/nginx-${version}/objs/ngx_http_brotli_static_module.so /usr/lib/nginx/modules/
-COPY --from=builder /root/nginx-${version}/objs/ngx_http_headers_more_filter_module.so /usr/lib/nginx/modules/
 COPY --from=builder /root/nginx-${version}/objs/ngx_http_fancyindex_module.so /usr/lib/nginx/modules/
 
 # remove debug modules we don't need it
