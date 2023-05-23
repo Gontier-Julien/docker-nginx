@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  doh-server:
+    image: snowy68/nginx-stable:latest
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80/tcp"
+    volumes:
+      - ./nginx:/etc/nginx
+      - /etc/passwd:/etc/passwd:ro 
