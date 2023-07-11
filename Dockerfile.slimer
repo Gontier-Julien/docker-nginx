@@ -1,0 +1,27 @@
+ARG version=1.24.0
+
+FROM nginx:stable-alpine-slim AS builder
+
+ARG version
+ARG fancyindex=0.5.2
+
+WORKDIR /root/
+
+# base nginx
+RUN apk add --update --no-cache build-base pcre2-dev zlib-dev linux-pam-dev \
+    && wget http://nginx.org/download/nginx-${version}.tar.gz \
+    && tar zxf nginx-${version}.tar.gz \
+# fancyindex module
+    && cd /root/ \
+    && wget https://github.com/aperezdc/ngx-fancyindex/archive/refs/tags/v${fancyindex}.tar.gz -O ngx_fancyindex.tar.gz \
+    && tar xf ngx_fancyindex.tar.gz \
+    && cd ngx-fancyindex-${fancyindex} \
+    && cd ../nginx-${version} \
+    && ./configure --with-compat --add-dynamic-module=../ngx-fancyindex-${fancyindex} \
+    && make modules
+
+FROM nginx:stable-alpine-slim
+
+ARG version
+# copy the modules
+COPY --from=builder /root/nginx-${version}/objs/ngx_http_fancyindex_module.so /usr/lib/nginx/modules/
